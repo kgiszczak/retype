@@ -4,7 +4,7 @@
   var CARET_CHAR = '\u2603';
 
   function findCaretNode(container) {
-    var walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT);
+    var walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null, null);
 
     var node, caretNode;
     while((node = walker.nextNode())) {
