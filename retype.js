@@ -66,12 +66,46 @@
     this.$element.html(html);
   }
 
+  // HISTORY CLASS DEFINITION
+  // ========================
+
+  var History = function(content) {
+    this.entries = [content || ''];
+    this.position = 0;
+  };
+
+  History.prototype.push = function(content) {
+    this.entries.length = this.position + 1;
+    if (this.entries[this.position].replace(CARET_REGEXP, '') === content.replace(CARET_REGEXP, ''))
+      return;
+    this.entries.push(content);
+    this.position += 1;
+  };
+
+  History.prototype.prev = function() {
+    if (this.position > 0) this.position -= 1;
+    return this.entries[this.position];
+  };
+
+  History.prototype.next = function() {
+    if (this.position < this.entries.length - 1) this.position += 1;
+    return this.entries[this.position];
+  };
+
+  History.prototype.isLast = function() {
+    return this.entries.length === this.position + 1;
+  };
+
   // RETYPE CLASS DEFINITION
   // =======================
 
   var Retype = function(element, trigger) {
     this.$element = $(element);
     this.setTrigger(trigger);
+
+    this.history = new History(this.$element.html());
+    this.prevText = this.$element.html();
+    this.action = 'none';
 
     this.$element.on('keydown', $.proxy(keydown, this));
   };
@@ -86,10 +120,53 @@
   };
 
   function keydown(e) {
-    var that = this;
+    var that = this,
+        prevAction = this.action;
+
+    if (e.which === 90 && (e.metaKey || e.ctrlKey)) {
+      e.preventDefault();
+    }
 
     setTimeout(function() {
-      retype(that.$element[0], that.callback);
+      retype(that.$element[0], function() {
+        var currentText = that.$element.html();
+
+        if (e.which === 90 && (e.metaKey || e.ctrlKey)) {
+          if (e.shiftKey) {
+            if (that.history.isLast()) that.history.push(that.prevText);
+            that.$element.html(that.history.next());
+          } else {
+            if (that.history.isLast()) that.history.push(that.prevText);
+            that.$element.html(that.history.prev());
+            that.action = 'back';
+          }
+        } else {
+          switch (e.which) {
+            case 8:
+              that.action = 'del';
+              break;
+            case 86:
+              if (e.metaKey || e.ctrlKey) that.action = 'paste' + new Date().getTime();
+              break;
+            case 37:
+            case 38:
+            case 39:
+            case 40:
+              that.action = 'arrow';
+              break;
+            default:
+              that.action = 'none';
+          }
+
+          if (that.prevText.replace(CARET_REGEXP, '') !== currentText.replace(CARET_REGEXP, '') &&
+              prevAction !== that.action) {
+            that.history.push(that.prevText);
+          }
+        }
+
+        that.callback();
+        that.prevText = that.$element.html();
+      });
     }, 0);
   }
 
