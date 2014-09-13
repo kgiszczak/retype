@@ -129,7 +129,8 @@
 
     setTimeout(function() {
       retype(that.$element[0], function() {
-        var currentText = that.$element.html();
+        var currentText = that.$element.html().replace(CARET_REGEXP, '');
+        var prevTextClear = that.prevText.replace(CARET_REGEXP, '');
 
         if (e.which === 90 && (e.metaKey || e.ctrlKey)) {
           if (e.shiftKey) {
@@ -155,11 +156,10 @@
               that.action = 'arrow';
               break;
             default:
-              that.action = 'none';
+              if (prevTextClear !== currentText) that.action = 'none';
           }
 
-          if (that.prevText.replace(CARET_REGEXP, '') !== currentText.replace(CARET_REGEXP, '') &&
-              prevAction !== that.action) {
+          if (prevTextClear !== currentText && prevAction !== that.action) {
             that.history.push(that.prevText);
           }
         }
