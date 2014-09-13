@@ -2,6 +2,7 @@
   'use strict';
 
   var CARET_CHAR = '\u2603';
+  var CARET_REGEXP = new RegExp(CARET_CHAR, 'ig');
 
   function findCaretNode(container) {
     var walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null, null);
@@ -41,7 +42,7 @@
         pos.setStart(container, 0);
       } else {
         var index = node.textContent.indexOf(CARET_CHAR);
-        node.textContent = node.textContent.replace(new RegExp(CARET_CHAR, 'ig'), '');
+        node.textContent = node.textContent.replace(CARET_REGEXP, '');
         pos.setStart(node, index);
       }
 
