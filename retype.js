@@ -107,6 +107,8 @@
     this.prevText = this.$element.html();
     this.action = 'none';
 
+    sanitize.call(this);
+
     this.$element.on('keydown', $.proxy(keydown, this));
   };
 
@@ -119,6 +121,16 @@
     }
   };
 
+  function sanitize() {
+    var html = this.$element.html();
+
+    html = html.replace(/<div>|<\/div>/ig, '')
+               .replace(/<br>$/i, '');
+    html += '<br>';
+
+    this.$element.html(html);
+  }
+
   function keydown(e) {
     var that = this,
         prevAction = this.action;
@@ -129,6 +141,8 @@
 
     setTimeout(function() {
       retype(that.$element[0], function() {
+        sanitize.call(that);
+
         var currentText = that.$element.html().replace(CARET_REGEXP, '');
         var prevTextClear = that.prevText.replace(CARET_REGEXP, '');
 
