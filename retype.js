@@ -28,6 +28,7 @@
     range.insertNode(caret);
 
     callback();
+    container.innerHTML = container.innerHTML; // mutate the dom
 
     var node = findCaretNode(container);
 
