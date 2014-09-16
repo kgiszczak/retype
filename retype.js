@@ -174,12 +174,13 @@
       e.preventDefault();
     }
 
+    var prevText = this.$element.html();
+
     setTimeout(function() {
+      var currentText = that.$element.html();
+
       retype(that.$element[0], function() {
         normalize.call(that);
-
-        var currentText = that.$element.html().replace(CARET_REGEXP, '');
-        var prevTextClear = that.prevText.replace(CARET_REGEXP, '');
 
         if (e.which === 90 && (e.metaKey || e.ctrlKey)) {
           if (e.shiftKey) {
@@ -205,10 +206,10 @@
               that.action = 'arrow';
               break;
             default:
-              if (prevTextClear !== currentText) that.action = 'none';
+              if (prevText !== currentText) that.action = 'none';
           }
 
-          if (prevTextClear !== currentText && prevAction !== that.action) {
+          if (prevText !== currentText && prevAction !== that.action) {
             that.history.push(that.prevText);
           }
         }
