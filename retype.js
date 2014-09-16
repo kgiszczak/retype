@@ -108,7 +108,7 @@
     this.prevText = this.$element.html();
     this.action = 'none';
 
-    sanitize.call(this);
+    normalize.call(this);
 
     this.$element.on('keydown', $.proxy(keydown, this));
   };
@@ -122,12 +122,11 @@
     }
   };
 
-  function sanitize() {
+  function normalize() {
     var html = this.$element.html();
 
-    html = html.replace(/<div>|<\/div>/ig, '')
-               .replace(/<br>$/i, '');
-    html += '<br>';
+    // fix strange behavior under FF when input is empty
+    if (html === '') html = '<br>';
 
     this.$element.html(html);
   }
@@ -142,7 +141,7 @@
 
     setTimeout(function() {
       retype(that.$element[0], function() {
-        sanitize.call(that);
+        normalize.call(that);
 
         var currentText = that.$element.html().replace(CARET_REGEXP, '');
         var prevTextClear = that.prevText.replace(CARET_REGEXP, '');
