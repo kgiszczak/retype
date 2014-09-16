@@ -52,16 +52,51 @@
     }
   }
 
+  function findTags(trigger, html, triggers) {
+    var i, e, last, start = null, ary = [];
+    var regexp = new RegExp('\\s|<|\\' + triggers.join('|\\'));
+
+    for (i = 0; i < html.length; i++) {
+      e = html[i];
+
+      last = i === html.length - 1;
+      if (start !== null && i !== start && (e.match(regexp) || last)) {
+        ary.push({start: start, stop: last ? i + 1 : i});
+        start = null;
+      }
+
+      if (start === null && e === trigger) start = i;
+    }
+
+    var entries = [];
+
+    for (i = 0; i < ary.length; i++) {
+      e = ary[i];
+
+      if (html[e.stop - 1] === CARET_CHAR) e.stop -= 1;
+      if (e.start + 1 !== e.stop) entries.push(e);
+    }
+
+    return entries;
+  }
+
+
   function defaultCallback() {
     var html = this.$element.html();
 
-    html = html.replace(/<span class="tag tag\d+">/ig, '')
-               .replace(/<\/span>/ig, '');
+    html = html.replace(/<\/?span[^>]*>/ig, '');
 
-    var i, exp;
+    var i, j, e, tags;
     for (i = 0; i < this.trigger.length; i++) {
-      exp = new RegExp('\\' + this.trigger[i] + '\\S{2,}', 'ig');
-      html = html.replace(exp, '<span class="tag tag' + (i + 1) + '">$&</span>');
+      tags = findTags(this.trigger[i], html, this.trigger);
+
+      for (j = tags.length - 1; j >= 0; j--) {
+        e = tags[j];
+        html = html.substring(0, e.start) +
+          '<span class="tag tag' + (i + 1) + '">' +
+          html.substring(e.start, e.stop) +
+          '</span>' + html.substring(e.stop);
+      }
     }
 
     this.$element.html(html);
