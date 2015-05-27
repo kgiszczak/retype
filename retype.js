@@ -174,6 +174,8 @@
       e.preventDefault();
     }
 
+    if (e.which === 9) return; // do nothing on tab key
+
     var prevText = this.$element.html();
 
     setTimeout(function() {
