@@ -161,9 +161,17 @@
     var html = this.$element.html();
 
     // fix strange behavior under FF when input is empty
-    if (html === '') html = '<br>';
+    if (html === '') {
+      this.$element.html('<br>');
 
-    this.$element.html(html);
+      var selection = window.getSelection();
+      var pos = document.createRange();
+
+      pos.setStart(this.$element[0], 0);
+
+      selection.removeAllRanges();
+      selection.addRange(pos);
+    }
   }
 
   function keydown(e) {
@@ -182,8 +190,6 @@
       var currentText = that.$element.html();
 
       retype(that.$element[0], function() {
-        normalize.call(that);
-
         if (e.which === 90 && (e.metaKey || e.ctrlKey)) {
           if (e.shiftKey) {
             if (that.history.isLast()) that.history.push(that.prevText);
@@ -219,6 +225,8 @@
         that.callback();
         that.prevText = that.$element.html();
       });
+
+      normalize.call(that);
     }, 0);
   }
 
