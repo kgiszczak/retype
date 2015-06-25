@@ -53,20 +53,21 @@
   }
 
   function findTags(trigger, html, triggers) {
-    var i, e, last, start = null, ary = [];
+    var i, e, start = null, ary = [];
     var regexp = new RegExp('\\s|<|\\' + triggers.join('|\\'));
 
     for (i = 0; i < html.length; i++) {
       e = html[i];
 
-      last = i === html.length - 1;
-      if (start !== null && i !== start && (e.match(regexp) || last)) {
-        ary.push({start: start, stop: last ? i + 1 : i});
+      if (start !== null && e.match(regexp)) {
+        ary.push({start: start, stop: i});
         start = null;
       }
 
       if (start === null && e === trigger) start = i;
     }
+
+    if (start !== null) ary.push({start: start, stop: html.length});
 
     var entries = [];
 
