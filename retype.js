@@ -140,11 +140,12 @@
     this.$element = $(element);
     this.setTrigger(trigger);
 
+    normalize.call(this);
+    this.callback();
+
     this.history = new History(this.$element.html());
     this.prevText = this.$element.html();
     this.action = 'none';
-
-    normalize.call(this);
 
     this.$element.on('keydown', $.proxy(keydown, this));
   };
