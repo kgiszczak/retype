@@ -108,30 +108,52 @@
 
   var History = function(content) {
     this.entries = [content || ''];
+    this.reverts = [];
     this.position = 0;
+    this.revertsPos = -1;
+  };
+
+  History.prototype.update = function(content) {
+    if (this.position !== 0) return;
+    if (sanitize(this.entries[0]) !== sanitize(content)) return;
+    this.entries[0] = content;
   };
 
   History.prototype.push = function(content) {
-    this.entries.length = this.position + 1;
-    if (this.entries[this.position].replace(CARET_REGEXP, '') === content.replace(CARET_REGEXP, ''))
-      return;
+    if (sanitize(content) === sanitize(this.entries[this.position])) return;
     this.entries.push(content);
     this.position += 1;
   };
 
   History.prototype.prev = function() {
+    var val = this.entries[this.position];
     if (this.position > 0) this.position -= 1;
-    return this.entries[this.position];
+    this.entries.length = this.position + 1;
+    return val;
   };
 
-  History.prototype.next = function() {
-    if (this.position < this.entries.length - 1) this.position += 1;
-    return this.entries[this.position];
+  History.prototype.keep = function(content) {
+    if (sanitize(content) === sanitize(this.entries[0])) return;
+    if (sanitize(content) === sanitize(this.entries[this.position])) return;
+    this.reverts.push(content);
+    this.revertsPos += 1;
   };
 
-  History.prototype.isLast = function() {
-    return this.entries.length === this.position + 1;
+  History.prototype.revert = function() {
+    var val = this.reverts[this.revertsPos];
+    if (this.revertsPos > -1) this.revertsPos -= 1;
+    this.reverts.length = this.revertsPos + 1;
+    return val;
   };
+
+  History.prototype.clearReverts = function() {
+    this.reverts.length = 0;
+    this.revertsPos = -1;
+  };
+
+  function sanitize(txt) {
+    return txt.replace(CARET_CHAR, '');
+  }
 
   // RETYPE CLASS DEFINITION
   // =======================
@@ -143,11 +165,13 @@
     normalize.call(this);
     this.callback();
 
-    this.history = new History(this.$element.html());
-    this.prevText = this.$element.html();
+    this.history = new History(CARET_CHAR + this.$element.html());
     this.action = 'none';
 
-    this.$element.on('keydown', $.proxy(keydown, this));
+    this.$element
+      .on('keydown', $.proxy(keydown, this))
+      .on('focus', $.proxy(focus, this))
+      .on('click', $.proxy(click, this));
   };
 
   Retype.prototype.setTrigger = function(trigger) {
@@ -163,22 +187,13 @@
     var html = this.$element.html();
 
     // fix strange behavior under FF when input is empty
-    if (html === '') {
-      this.$element.html('<br>');
-
-      var selection = window.getSelection();
-      var pos = document.createRange();
-
-      pos.setStart(this.$element[0], 0);
-
-      selection.removeAllRanges();
-      selection.addRange(pos);
-    }
+    if (html === '') this.$element.html('<br>');
   }
 
   function keydown(e) {
     var that = this,
-        prevAction = this.action;
+        prevAction = this.action,
+        prevTextRetyped;
 
     if (e.which === 90 && (e.metaKey || e.ctrlKey)) {
       e.preventDefault();
@@ -188,17 +203,21 @@
 
     var prevText = this.$element.html();
 
+    retype(that.$element[0], function() {
+      prevTextRetyped = that.$element.html();
+    });
+
     setTimeout(function() {
       var currentText = that.$element.html();
 
       retype(that.$element[0], function() {
         if (e.which === 90 && (e.metaKey || e.ctrlKey)) {
           if (e.shiftKey) {
-            if (that.history.isLast()) that.history.push(that.prevText);
-            that.$element.html(that.history.next());
+            if (that.history.revertsPos > -1) that.history.push(prevTextRetyped);
+            that.$element.html(that.history.revert());
           } else {
-            if (that.history.isLast()) that.history.push(that.prevText);
             that.$element.html(that.history.prev());
+            that.history.keep(prevTextRetyped);
             that.action = 'back';
           }
         } else {
@@ -220,16 +239,32 @@
           }
 
           if (prevText !== currentText && prevAction !== that.action) {
-            that.history.push(that.prevText);
+            that.history.push(prevTextRetyped);
+            that.history.clearReverts();
+          }
+
+          if (that.action === 'arrow') {
+            that.history.update(that.$element.html());
           }
         }
 
         that.callback();
-        that.prevText = that.$element.html();
       });
 
       normalize.call(that);
     }, 0);
+  }
+
+  function focus() {
+    this.history.update(CARET_CHAR + this.$element.html());
+  }
+
+  function click() {
+    var that = this;
+
+    retype(this.$element[0], function() {
+      that.history.update(that.$element.html());
+    });
   }
 
   // RETYPE PLUGIN DEFINITION
