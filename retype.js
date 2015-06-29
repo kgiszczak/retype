@@ -209,6 +209,7 @@
 
     setTimeout(function() {
       var currentText = that.$element.html();
+      prevTextRetyped = prevTextRetyped || prevText;
 
       retype(that.$element[0], function() {
         if (e.which === 90 && (e.metaKey || e.ctrlKey)) {
