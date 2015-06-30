@@ -271,6 +271,9 @@
   // RETYPE PLUGIN DEFINITION
   // ========================
 
+  $.retype = retype;
+  $.retype.CARET_CHAR = CARET_CHAR;
+
   $.fn.retype = function(option) {
     return this.each(function() {
       var $this = $(this),
