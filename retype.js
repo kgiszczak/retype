@@ -20,8 +20,9 @@
 
   function retype(container, callback) {
     var selection = window.getSelection();
-    var range = selection.getRangeAt(0);
+    if (selection.rangeCount === 0) return;
 
+    var range = selection.getRangeAt(0);
     if (!range.collapsed) return;
 
     var caret = document.createTextNode(CARET_CHAR);
