@@ -25,6 +25,8 @@
     var range = selection.getRangeAt(0);
     if (!range.collapsed) return;
 
+    if (document.activeElement !== container) return;
+
     var caret = document.createTextNode(CARET_CHAR);
     range.insertNode(caret);
 
