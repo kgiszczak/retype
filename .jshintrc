@@ -1,0 +1,13 @@
+{
+  "asi": true,
+  "browser": true,
+  "eqeqeq": true,
+  "eqnull": true,
+  "jquery": true,
+  "latedef": "nofunc",
+  "strict": true,
+  "noarg": true,
+  "undef": true,
+  "unused": true,
+  "validthis": true
+}
