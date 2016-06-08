@@ -1,6 +1,6 @@
 var gulp = require('gulp'),
     jshint = require('gulp-jshint'),
-    rename = require('gulp-rename');
+    rename = require('gulp-rename'),
     uglify = require('gulp-uglify');
 
 gulp.task('default', function() {
