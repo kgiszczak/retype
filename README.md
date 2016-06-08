@@ -40,7 +40,7 @@ Lorem ipsum <span class="tag tag1">#dolor</span> sit <span class="tag tag2">!ame
 
 ### Full control
 
-If you want to have full control of what is replaced you can initialize this plugin with callback function. For example to wrap every occurance of
+If you want to have full control over what is replaced you can initialize this plugin with callback function. For example to wrap every occurance of
 words `foo`, `bar` or `baz` with a span element you can use:
 
 ```javascript
