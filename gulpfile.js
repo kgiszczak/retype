@@ -19,5 +19,5 @@ gulp.task('build', ['jshint'], function() {
     .pipe(gulp.dest('dist'))
     .pipe(rename({suffix: '.min'}))
     .pipe(uglify())
-    .pipe(gulp.dest('dist'))
+    .pipe(gulp.dest('dist'));
 });
