@@ -1,0 +1,27 @@
+{
+  "name": "retype",
+  "version": "0.0.1",
+  "description": "Library to save and restore cursor position on contenteditable elements",
+  "main": "retype.js",
+  "dependencies": {
+    "jquery": "^2.2.4"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-jshint": "^2.0.1",
+    "jshint": "^2.9.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kgiszczak/retype.git"
+  },
+  "author": "Kamil Giszczak <beerkg@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kgiszczak/retype/issues"
+  },
+  "homepage": "https://github.com/kgiszczak/retype#readme"
+}
