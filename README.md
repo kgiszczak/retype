@@ -1,6 +1,6 @@
 # Retype
 
-Library to save and restore cursor position on contenteditable elements. You can use it to create functionality like Twitter's hashtags.
+Library to save and restore cursor position on contenteditable elements. You can use it to create functionality like Twitter's hashtags. It works by inserting special character in place of cursor, manipulating the text and then replacing this special character with cursor.
 
 ## Installation
 
@@ -15,7 +15,7 @@ Both the minified and uncompressed (for development) versions are in the `/dist`
 This plugin works on contenteditable element.
 
 ```html
-<div id="editor" contenteditable="true">
+<div id="editor" contenteditable="true"></div>
 ```
 
 ### Simple usage
@@ -46,12 +46,18 @@ words `foo`, `bar` or `baz` with a span element you can use:
 ```javascript
 $('#editor').retype(function() {
   var html = $(this).html();
+  var c = $.retype.CARET_CHAR;
 
   html = html.replace(/<\/?span[^>]*>/ig, '');
 
-  html = html.replace(/foo/ig, '<span class="tag1">$&</span>');
-  html = html.replace(/bar/ig, '<span class="tag2">$&</span>');
-  html = html.replace(/baz/ig, '<span class="tag3">$&</span>');
+  var foo = new RegExp('f' + c + '?o' + c + '?o', 'ig');
+  html = html.replace(foo, '<span class="tag tag1">$&</span>');
+
+  var bar = new RegExp('b' + c + '?a' + c + '?r', 'ig');
+  html = html.replace(bar, '<span class="tag tag2">$&</span>');
+
+  var baz = new RegExp('b' + c + '?a' + c + '?z', 'ig');
+  html = html.replace(baz, '<span class="tag tag3">$&</span>');
 
   $(this).html(html);
 });
