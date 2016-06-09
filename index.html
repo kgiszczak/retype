@@ -122,7 +122,7 @@
 
 <p>Library to save and restore cursor position on contenteditable elements. You can use it to create functionality like Twitter&rsquo;s hashtags. It works by inserting special character in place of cursor, manipulating the text and then replacing this special character with cursor.</p>
 
-<p>You can find source code <a href="https://github.com/kgiszczak/retype">here</a>.</p>
+<p>You can find source code at <a href="https://github.com/kgiszczak/retype">https://github.com/kgiszczak/retype</a>.</p>
 
 <h1 id="installation">Installation</h1>
 
@@ -158,12 +158,14 @@ Both the minified and uncompressed (for development) versions are in the <code c
 
   <span class="nx">html</span> <span class="o">=</span> <span class="nx">html</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/&lt;</span><span class="se">\/?</span><span class="sr">span</span><span class="se">[^</span><span class="sr">&gt;</span><span class="se">]</span><span class="sr">*&gt;/ig</span><span class="p">,</span> <span class="s1">''</span><span class="p">);</span>
 
-  <span class="nx">html</span> <span class="o">=</span> <span class="nx">html</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s1">'f'</span> <span class="o">+</span> <span class="nx">c</span> <span class="o">+</span> <span class="s1">'?o'</span> <span class="o">+</span> <span class="nx">c</span> <span class="o">+</span> <span class="s1">'?o'</span><span class="p">,</span> <span class="s1">'ig'</span><span class="p">),</span>
-    <span class="s1">'&lt;span class="tag tag1"&gt;$&amp;&lt;/span&gt;'</span><span class="p">);</span>
-  <span class="nx">html</span> <span class="o">=</span> <span class="nx">html</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s1">'b'</span> <span class="o">+</span> <span class="nx">c</span> <span class="o">+</span> <span class="s1">'?a'</span> <span class="o">+</span> <span class="nx">c</span> <span class="o">+</span> <span class="s1">'?r'</span><span class="p">,</span> <span class="s1">'ig'</span><span class="p">),</span>
-    <span class="s1">'&lt;span class="tag tag2"&gt;$&amp;&lt;/span&gt;'</span><span class="p">);</span>
-  <span class="nx">html</span> <span class="o">=</span> <span class="nx">html</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s1">'b'</span> <span class="o">+</span> <span class="nx">c</span> <span class="o">+</span> <span class="s1">'?a'</span> <span class="o">+</span> <span class="nx">c</span> <span class="o">+</span> <span class="s1">'?z'</span><span class="p">,</span> <span class="s1">'ig'</span><span class="p">),</span>
-    <span class="s1">'&lt;span class="tag tag3"&gt;$&amp;&lt;/span&gt;'</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">foo</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s1">'f'</span> <span class="o">+</span> <span class="nx">c</span> <span class="o">+</span> <span class="s1">'?o'</span> <span class="o">+</span> <span class="nx">c</span> <span class="o">+</span> <span class="s1">'?o'</span><span class="p">,</span> <span class="s1">'ig'</span><span class="p">);</span>
+  <span class="nx">html</span> <span class="o">=</span> <span class="nx">html</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">foo</span><span class="p">,</span> <span class="s1">'&lt;span class="tag tag1"&gt;$&amp;&lt;/span&gt;'</span><span class="p">);</span>
+
+  <span class="kd">var</span> <span class="nx">bar</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s1">'b'</span> <span class="o">+</span> <span class="nx">c</span> <span class="o">+</span> <span class="s1">'?a'</span> <span class="o">+</span> <span class="nx">c</span> <span class="o">+</span> <span class="s1">'?r'</span><span class="p">,</span> <span class="s1">'ig'</span><span class="p">);</span>
+  <span class="nx">html</span> <span class="o">=</span> <span class="nx">html</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">bar</span><span class="p">,</span> <span class="s1">'&lt;span class="tag tag2"&gt;$&amp;&lt;/span&gt;'</span><span class="p">);</span>
+
+  <span class="kd">var</span> <span class="nx">baz</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s1">'b'</span> <span class="o">+</span> <span class="nx">c</span> <span class="o">+</span> <span class="s1">'?a'</span> <span class="o">+</span> <span class="nx">c</span> <span class="o">+</span> <span class="s1">'?z'</span><span class="p">,</span> <span class="s1">'ig'</span><span class="p">);</span>
+  <span class="nx">html</span> <span class="o">=</span> <span class="nx">html</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">baz</span><span class="p">,</span> <span class="s1">'&lt;span class="tag tag3"&gt;$&amp;&lt;/span&gt;'</span><span class="p">);</span>
 
   <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">html</span><span class="p">);</span>
 <span class="p">});</span>
@@ -182,9 +184,14 @@ Both the minified and uncompressed (for development) versions are in the <code c
 
     html = html.replace(/<\/?span[^>]*>/ig, '');
 
-    html = html.replace(new RegExp('f' + c + '?o' + c + '?o', 'ig'), '<span class="tag tag1">$&</span>');
-    html = html.replace(new RegExp('b' + c + '?a' + c + '?r', 'ig'), '<span class="tag tag2">$&</span>');
-    html = html.replace(new RegExp('b' + c + '?a' + c + '?z', 'ig'), '<span class="tag tag3">$&</span>');
+    var foo = new RegExp('f' + c + '?o' + c + '?o', 'ig');
+    html = html.replace(foo, '<span class="tag tag1">$&</span>');
+
+    var bar = new RegExp('b' + c + '?a' + c + '?r', 'ig');
+    html = html.replace(bar, '<span class="tag tag2">$&</span>');
+
+    var baz = new RegExp('b' + c + '?a' + c + '?z', 'ig');
+    html = html.replace(baz, '<span class="tag tag3">$&</span>');
 
     $(this).html(html);
   });
