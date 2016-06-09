@@ -2,6 +2,8 @@
 
 Library to save and restore cursor position on contenteditable elements. You can use it to create functionality like Twitter's hashtags. It works by inserting special character in place of cursor, manipulating the text and then replacing this special character with cursor.
 
+Demo and documentation is available at [https://kgiszczak.github.io/retype](https://kgiszczak.github.io/retype)
+
 ## Installation
 
 jQuery is required for this plugin to work. In your HTML file, load simply by:
