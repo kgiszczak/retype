@@ -174,6 +174,7 @@
     this.$element
       .on('keydown', $.proxy(keydown, this))
       .on('focus', $.proxy(focus, this))
+      .on('blur', $.proxy(blur, this))
       .on('click', $.proxy(click, this));
   };
 
@@ -261,6 +262,10 @@
 
   function focus() {
     this.history.update(CARET_CHAR + this.$element.html());
+  }
+
+  function blur() {
+    this.callback();
   }
 
   function click() {
